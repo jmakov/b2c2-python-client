@@ -21,9 +21,9 @@ def validate_order_size(instrument: str, quantity: decimal.Decimal) -> None:
     """
     digits = quantity.as_tuple()[-1] * (-1)
     is_fiat_or_stablecoin_pair = any([fiat in instrument for fiat in constant.Instruments.supported_fiat_currencies])
+    logger.debug(f"Digits: {digits}")
+    logger.debug(f"is fiat: {is_fiat_or_stablecoin_pair}")
 
-    logger.info(digits)
-    logger.info(f"is fiat: {is_fiat_or_stablecoin_pair}")
     if is_fiat_or_stablecoin_pair:
         if digits > constant.Instruments.MAX_DIGITS_FIAT:
             raise click.exceptions.BadParameter(

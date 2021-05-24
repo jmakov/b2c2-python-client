@@ -61,8 +61,13 @@ class HttpClient:
         response = self.session.request(method, url, timeout=self.timeout, data=data)
         self.logger.debug(f"Response: {response.text}")
 
+        json = response.json()
+        errors_present = json.get("errors")
+        if errors_present:
+            raise exception.HttpClientException(errors_present)
+
         response.raise_for_status()
-        return response.json()
+        return json
 
     def get_balance(self) -> typing.Dict:
         return self._send_request("GET", constant.APIEndpoint.balance)

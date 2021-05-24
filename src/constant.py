@@ -14,10 +14,10 @@ class Path:
 
 
 class APIEndpoint:
-    balance = "balance"
-    instruments = "instruments"
-    order = "order"
-    rfq = "request_for_quote"
+    balance = "balance/"
+    instruments = "instruments/"
+    order = "order/"
+    rfq = "request_for_quote/"
     MIN_ORDER_VALID_SECONDS = 10
 
 
