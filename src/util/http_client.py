@@ -58,7 +58,7 @@ class HttpClient:
         url = urljoin(self.base_url, endpoint)
         self.logger.info(f"Requesting url: {url}")
 
-        response = self.session.request(method, url, timeout=self.timeout, data=data)
+        response = self.session.request(method, url, timeout=self.timeout, json=data)
         self.logger.debug(f"Response: {response.text}")
 
         json = response.json()

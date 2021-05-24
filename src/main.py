@@ -98,7 +98,7 @@ def get_rfq(ctx, quantity: decimal.Decimal, side: str, instrument: str) -> None:
     data = {
         "instrument": instrument,
         "side": side,
-        "quantity": quantity,
+        "quantity": str(quantity),
         "client_rfq_id": str(uuid.uuid4())
     }
     response = ctx.obj.send_request_for_quote(data)
@@ -147,9 +147,9 @@ def send_order(ctx, price: str, quantity: decimal.Decimal, side: str, instrument
     data = {
         "instrument": instrument,
         "side": side,
-        "quantity": quantity,
+        "quantity": str(quantity),
         "client_order_id": str(uuid.uuid4()),
-        "price": price,
+        "price": str(price),
         "order_type": "FOK",
         "valid_until": valid_until,
         "executing_unit": "risk-adding-strategy"
