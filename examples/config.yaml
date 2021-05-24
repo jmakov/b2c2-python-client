@@ -1,0 +1,6 @@
+auth_token: "Token e13e627c49705f83cbe7b60389ac411b6f86fee7"
+log_level: DEBUG    # valid values: CRITICAL, FATAL, ERROR, WARN, WARNING, INFO, DEBUG, NOTSET
+base_url: https://api.uat.b2c2.net
+connection_timeout_seconds: 2
+max_connection_retries: 3
+wait_seconds_between_connection_retries: 1
