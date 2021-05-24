@@ -22,7 +22,7 @@ def validate_order_size(instrument: str, quantity: decimal.Decimal) -> None:
     digits = quantity.as_tuple()[-1] * (-1)
     is_fiat_or_stablecoin_pair = any([fiat in instrument for fiat in constant.Instruments.supported_fiat_currencies])
     logger.debug(f"Digits: {digits}")
-    logger.debug(f"is fiat: {is_fiat_or_stablecoin_pair}")
+    logger.debug(f"Has pair a fiat currency: {is_fiat_or_stablecoin_pair}")
 
     if is_fiat_or_stablecoin_pair:
         if digits > constant.Instruments.MAX_DIGITS_FIAT:
@@ -112,7 +112,13 @@ def get_rfq(ctx, quantity: decimal.Decimal, side: str, instrument: str) -> None:
     time_available = dt_now - dt_until
 
     if time_available.seconds > constant.APIEndpoint.MIN_ORDER_VALID_SECONDS:
-        ctx.invoke(send_order, response["price"], quantity, side, instrument, valid_until)
+        ctx.invoke(
+            send_order,
+            price=response["price"],
+            quantity=quantity,
+            side=side,
+            instrument=instrument,
+            valid_until=valid_until)
     else:
         logger.error(f"CFQ was valid till {valid_until}")
         raise RuntimeError("CFQ no longer valid.")

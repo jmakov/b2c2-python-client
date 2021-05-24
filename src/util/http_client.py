@@ -62,9 +62,11 @@ class HttpClient:
         self.logger.debug(f"Response: {response.text}")
 
         json = response.json()
-        errors_present = json.get("errors")
-        if errors_present:
-            raise exception.HttpClientException(errors_present)
+
+        if isinstance(json, dict):
+            errors_present = json.get("errors")
+            if errors_present:
+                raise exception.HttpClientException(errors_present)
 
         response.raise_for_status()
         return json
