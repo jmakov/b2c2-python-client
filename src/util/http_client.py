@@ -16,8 +16,8 @@ def retry_request(func: typing.Callable) -> typing.Callable:
             try:
                 response = func(self, method, endpoint, data)
             except (requests.exceptions.HTTPError, requests.exceptions.TooManyRedirects) as e:
-                self.logger.exception(e)
-                raise exception.HttpClientException("Please check your config file.")
+                self.logger.error(e)
+                raise exception.HttpClientException("Please check your config file.") from None
             except (
                     requests.exceptions.Timeout,
                     requests.exceptions.ConnectTimeout,
@@ -25,13 +25,14 @@ def retry_request(func: typing.Callable) -> typing.Callable:
             ) as e:
                 self.logger.error(e)
             except requests.exceptions.RequestException as e:
-                self.logger.exception(e)
-                raise exception.HttpClientException(e)
+                self.logger.error(e)
+                raise exception.HttpClientException(e) from None
             else:
                 return response
 
             connection_attempts += 1
             time.sleep(self.sleep_between_reconnects)
+            self.logger.info(f"Connection attempt: {connection_attempts}")
 
         raise exception.HttpClientException(f"Request failed after {connection_attempts} retries.")
     return inner
@@ -58,7 +59,7 @@ class HttpClient:
         self.logger.info(f"Requesting url: {url}")
 
         response = self.session.request(method, url, timeout=self.timeout, data=data)
-        self.logger.debug(f"Response: {response}")
+        self.logger.debug(f"Response: {response.text}")
 
         response.raise_for_status()
         return response.json()
