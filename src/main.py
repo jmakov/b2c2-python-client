@@ -74,7 +74,7 @@ def show_balance(ctx) -> None:  # type: ignore
     """
     click.echo("Requesting balance...")
     response = ctx.obj.get_balance()
-    click.echo("\n".join(f"{k}: {v}" for k, v in response))
+    click.echo("\n".join(f"{k}: {v}" for k, v in response.items()))
 
 
 @click.option(
@@ -102,7 +102,7 @@ def get_rfq(ctx, quantity: decimal.Decimal, side: str, instrument: str) -> None:
         "client_rfq_id": str(uuid.uuid4())
     }
     response = ctx.obj.send_request_for_quote(data)
-    click.echo("\n".join(f"{k}: {v}" for k, v in response))
+    click.echo("\n".join(f"{k}: {v}" for k, v in response.items()))
     click.confirm("\nExecute RFQ?", abort=True)
 
     # check that the RFQ is still valid
